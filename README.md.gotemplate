@@ -25,6 +25,7 @@ You can also run this step directly with [bitrise CLI](https://github.com/bitris
 {{- if eq (len .Inputs) 0 }}
 There are no inputs defined in this step
 {{- else }}
+
 | Parameter | Description | Flags | Default |
 | --- | --- | --- | --- |
 {{- range $input := .Inputs }}
