@@ -41,7 +41,7 @@ There are no inputs defined in this step
 {{- $default = $value }}
 {{- end }}
 {{- end }}
-| `{{ $input_key }}` | {{ clean $description }} {{ if $values }} Possible values: <ul> {{ range $value := $values }} <li>{{ $value }}</li>{{ end }}{{ end}} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ $default }}`{{ end }} |
+| `{{ $input_key }}` | {{ clean $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ $default }}`{{ end }} |
 {{- end }}
 {{- end }}
 </details>
