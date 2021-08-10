@@ -1,10 +1,8 @@
 # {{ .Title }}
 
+[![Step changelog](https://shields.io/github/v/release/{{ githubName .Website }}?include_prereleases&label=changelog&color=blueviolet)]({{ .Website }}/releases)
+
 {{ .Summary }}
-
-Links:
-
-- [Changelog]({{ .Website }}/releases)
 
 <details>
 <summary>Description</summary>
@@ -16,7 +14,7 @@ Links:
 
 Add this step directly to your workflow in the [Bitrise Workflow Editor](https://devcenter.bitrise.io/steps-and-workflows/steps-and-workflows-index/).
 
-You can also run this step directly with [bitrise CLI](https://github.com/bitrise-io/bitrise).
+You can also run this step directly with [Bitrise CLI](https://github.com/bitrise-io/bitrise).
 
 ## ⚙️ Configuration
 
@@ -68,7 +66,11 @@ There are no outputs defined in this step
 {{- end }}
 </details>
 
-## 🙋 How to contribute
+## 🙋 Contributing
+
+We welcome [pull requests]({{ .Website }}/pulls) and [issues]({{ .SupportURL }}) against this repository.
+
+For pull requests, work on your changes in a forked repository and use the Bitrise CLI to [run step tests locally](https://devcenter.bitrise.io/bitrise-cli/run-your-first-build/).
 
 Links:
 

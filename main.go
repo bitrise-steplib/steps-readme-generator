@@ -63,10 +63,15 @@ func flagList(isRequired, isSensitive interface{}) string {
 	return strings.Join(flags, ", ")
 }
 
+func githubName(repoUrl string) string {
+	return strings.Split(repoUrl, "github.com/")[1]
+}
+
 func renderTemplate(stepConfig models.StepModel) (string, error) {
 	funcMap := template.FuncMap{
-		"clean":    clean,
-		"flagList": flagList,
+		"clean":      clean,
+		"flagList":   flagList,
+		"githubName": githubName,
 	}
 	readmeContent, err := templateutil.EvaluateTemplateStringToString(readmeTemplate, stepConfig, funcMap)
 	if err != nil {
