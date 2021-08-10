@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"errors"
 	"fmt"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/templateutil"
@@ -19,7 +20,11 @@ var readmeTemplate string
 func createBackup() error {
 	err := os.Rename("README.md", "README.md.backup")
 	if err != nil {
-		return fmt.Errorf("failed to rename README.md to README.md.backup, error: %s", err)
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		} else {
+			return fmt.Errorf("failed to rename README.md to README.md.backup, error: %s", err)
+		}
 	}
 	return nil
 }
