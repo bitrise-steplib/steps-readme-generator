@@ -1,0 +1,17 @@
+# github.com/bitrise-io/envman v0.0.0-20200512105748-919e33f391ee
+github.com/bitrise-io/envman/models
+# github.com/bitrise-io/go-utils v0.0.0-20210713111255-08be784d45d0
+## explicit
+github.com/bitrise-io/go-utils/colorstring
+github.com/bitrise-io/go-utils/fileutil
+github.com/bitrise-io/go-utils/log
+github.com/bitrise-io/go-utils/parseutil
+github.com/bitrise-io/go-utils/pathutil
+github.com/bitrise-io/go-utils/pointers
+github.com/bitrise-io/go-utils/templateutil
+# github.com/bitrise-io/stepman v0.0.0-20210517135458-203f7a48d37a
+## explicit
+github.com/bitrise-io/stepman/models
+# gopkg.in/yaml.v2 v2.4.0
+## explicit
+gopkg.in/yaml.v2
