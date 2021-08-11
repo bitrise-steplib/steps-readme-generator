@@ -9,6 +9,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/bitrise-io/go-utils/templateutil"
 	"github.com/bitrise-io/stepman/models"
@@ -17,6 +18,12 @@ import (
 
 //go:embed README.md.gotemplate
 var readmeTemplate string
+
+type templateInventory struct {
+	Step           models.StepModel
+	ExampleSection string
+	ContribSection string
+}
 
 func createBackup() error {
 	err := os.Rename("README.md", "README.md.backup")
@@ -38,6 +45,28 @@ func parseStep() (models.StepModel, error) {
 	}
 
 	return stepConfig, nil
+}
+
+func readSections(stepConfig Config) (exampleSection, contribSection string, err error) {
+	if stepConfig.ExampleSection != "" {
+		log.Infof("Using example section from %s", stepConfig.ExampleSection)
+		exampleFile, err := ioutil.ReadFile(stepConfig.ExampleSection)
+		if err != nil {
+			return "", "", err
+		}
+		exampleSection = string(exampleFile)
+	}
+
+	if stepConfig.ContribSection != "" {
+		log.Infof("Using contrib section from %s", stepConfig.ContribSection)
+		contribFile, err := ioutil.ReadFile(stepConfig.ContribSection)
+		if err != nil {
+			return "", "", err
+		}
+		contribSection = string(contribFile)
+	}
+
+	return exampleSection, contribSection, nil
 }
 
 func markdownTableCompatibleString(text string) string {
@@ -62,13 +91,20 @@ func githubName(repoURL string) string {
 	return strings.Split(repoURL, "github.com/")[1]
 }
 
-func renderTemplate(stepConfig models.StepModel) (string, error) {
+func renderTemplate(step models.StepModel, exampleSection, contribSection string) (string, error) {
 	funcMap := template.FuncMap{
 		"markdownTableCompatibleString": markdownTableCompatibleString,
 		"flagList":                      flagList,
 		"githubName":                    githubName,
 	}
-	readmeContent, err := templateutil.EvaluateTemplateStringToString(readmeTemplate, stepConfig, funcMap)
+
+	inventory := templateInventory{
+		Step:           step,
+		ExampleSection: exampleSection,
+		ContribSection: contribSection,
+	}
+
+	readmeContent, err := templateutil.EvaluateTemplateStringToString(readmeTemplate, inventory, funcMap)
 	if err != nil {
 		return "", fmt.Errorf("failed to evaluate template: %w", err)
 	}
@@ -84,6 +120,13 @@ func writeReadme(contents string) error {
 }
 
 func mainR() error {
+	var stepConfig Config
+	if err := stepconf.Parse(&stepConfig); err != nil {
+		return err
+	}
+	stepconf.Print(stepConfig)
+	fmt.Println()
+
 	log.Infof("Generating README.md from step.yml data")
 
 	if err := createBackup(); err != nil {
@@ -91,12 +134,17 @@ func mainR() error {
 	}
 	log.Donef("Created backup as README.md.backup")
 
-	stepConfig, err := parseStep()
+	stepData, err := parseStep()
 	if err != nil {
 		return err
 	}
 
-	readmeContents, err := renderTemplate(stepConfig)
+	exampleSection, contribSection, err := readSections(stepConfig)
+	if err != nil {
+		return err
+	}
+
+	readmeContents, err := renderTemplate(stepData, exampleSection, contribSection)
 	if err != nil {
 		return err
 	}

@@ -1,9 +1,14 @@
 title: Step readme generator
-summary: Generates a standard README.md based on step.yml data
-description: Generates a standard README.md based on step.yml data
-website: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator
-source_code_url: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator
-support_url: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator/issues
+summary: Generate a `README.md` based on `step.yml` data
+description: |-
+  This step can be used to generate a standard README.md based on step.yml data. The resulting readme will list the step's most important details, such as the description, a table of inputs and outputs, and links for further information.
+
+  The exact structure is defined in `README.md.gotemplate`
+
+  Additional step-specific content can be included from local Markdown files, such as example usage and information for contributors.
+website: https://github.com/bitrise-steplib/steps-readme-generator
+source_code_url: https://github.com/bitrise-steplib/steps-readme-generator
+support_url: https://github.com/bitrise-steplib/steps-readme-generator/issues
 
 is_always_run: false
 is_skippable: false
@@ -13,6 +18,12 @@ toolkit:
     package_name: github.com/bitrise-steplib/steps-readme-generator
 
 
-inputs: []
-
-outputs: []
+inputs:
+- example_section: ""
+  opts:
+    title: Example section path
+    description: Path to a Markdown file containing step-specific examples. If specified, the contents will be included in the Get started section.
+- contrib_section: ""
+  opts:
+    title: Contributor section path
+    description: Path to a Markdown file about step-specific information for contributors. If specified, the contents will be included in the Contributing section.
