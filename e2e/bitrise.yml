@@ -1,0 +1,18 @@
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  test_simple_run:
+    steps:
+    - path::./:
+        title: Generate my own README
+    - script:
+        title: Check existence of README.md
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            if [ ! -f README.md ]; then
+              echo "README.md not found after running the step"
+              exit 1
+            fi
