@@ -1,0 +1,18 @@
+title: Step readme generator
+summary: Generates a standard README.md based on step.yml data
+description: Generates a standard README.md based on step.yml data
+website: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator
+source_code_url: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator
+support_url: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator/issues
+
+is_always_run: false
+is_skippable: false
+
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/steps-readme-generator
+
+
+inputs: []
+
+outputs: []
