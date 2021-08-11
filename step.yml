@@ -10,7 +10,7 @@ is_skippable: false
 
 toolkit:
   go:
-    package_name: github.com/bitrise-steplib/bitrise-step-step-readme-generator
+    package_name: https://github.com/bitrise-steplib/bitrise-step-step-readme-generator
 
 
 inputs: []

@@ -40,7 +40,7 @@ There are no inputs defined in this step
 {{- $default = $value }}
 {{- end }}
 {{- end }}
-| `{{ $input_key }}` | {{ clean $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ $default }}`{{ end }} |
+| `{{ $input_key }}` | {{ markdownTableCompatibleString $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ $default }}`{{ end }} |
 {{- end }}
 {{- end }}
 </details>
@@ -61,7 +61,7 @@ There are no outputs defined in this step
 {{- $env_var = $key }}
 {{- end }}
 {{- end }}
-| `{{ $env_var }}` | {{ clean $description }} |
+| `{{ $env_var }}` | {{ markdownTableCompatibleString $description }} |
 {{- end }}
 {{- end }}
 </details>

@@ -20,11 +20,8 @@ var readmeTemplate string
 
 func createBackup() error {
 	err := os.Rename("README.md", "README.md.backup")
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return nil
-		}
-		return fmt.Errorf("failed to rename README.md to README.md.backup, error: %s", err)
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
 	}
 	return nil
 }
@@ -32,22 +29,20 @@ func createBackup() error {
 func parseStep() (models.StepModel, error) {
 	fileContents, err := ioutil.ReadFile("step.yml")
 	if err != nil {
-		return models.StepModel{}, fmt.Errorf("failed to open step.yml, error: %s", err)
+		return models.StepModel{}, fmt.Errorf("failed to open step.yml: %w", err)
 	}
 
 	stepConfig := models.StepModel{}
 	if err = yaml.Unmarshal(fileContents, &stepConfig); err != nil {
-		return models.StepModel{}, fmt.Errorf("failed to parse step.yml, error: %s", err)
+		return models.StepModel{}, fmt.Errorf("failed to parse step.yml: %w", err)
 	}
 
 	return stepConfig, nil
 }
 
-// clean makes Markdown table–compatible text from the input by replacing line breaks with spaces and escaping special
-// characters.
-func clean(text string) string {
-	withoutNewlines := strings.Replace(text, "\n", " ", -1)
-	escapedPipes := strings.Replace(withoutNewlines, "|", "\\|", -1)
+func markdownTableCompatibleString(text string) string {
+	withoutNewlines := strings.ReplaceAll(text, "\n", " ")
+	escapedPipes := strings.ReplaceAll(withoutNewlines, "|", "\\|")
 	return escapedPipes
 }
 
@@ -69,13 +64,13 @@ func githubName(repoURL string) string {
 
 func renderTemplate(stepConfig models.StepModel) (string, error) {
 	funcMap := template.FuncMap{
-		"clean":      clean,
-		"flagList":   flagList,
-		"githubName": githubName,
+		"markdownTableCompatibleString": markdownTableCompatibleString,
+		"flagList":                      flagList,
+		"githubName":                    githubName,
 	}
 	readmeContent, err := templateutil.EvaluateTemplateStringToString(readmeTemplate, stepConfig, funcMap)
 	if err != nil {
-		return "", fmt.Errorf("failed to evaluate template, error: %s", err)
+		return "", fmt.Errorf("failed to evaluate template: %w", err)
 	}
 
 	return readmeContent, nil
@@ -83,7 +78,7 @@ func renderTemplate(stepConfig models.StepModel) (string, error) {
 
 func writeReadme(contents string) error {
 	if err := ioutil.WriteFile("README.md", []byte(contents), 0644); err != nil {
-		return fmt.Errorf("failed to write README contents to file, error: %s", err)
+		return fmt.Errorf("failed to write README contents to file: %w", err)
 	}
 	return nil
 }
