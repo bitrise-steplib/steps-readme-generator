@@ -4,14 +4,15 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
-	"github.com/bitrise-io/go-utils/log"
-	"github.com/bitrise-io/go-utils/templateutil"
-	"github.com/bitrise-io/stepman/models"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
+
+	"github.com/bitrise-io/go-utils/log"
+	"github.com/bitrise-io/go-utils/templateutil"
+	"github.com/bitrise-io/stepman/models"
+	"gopkg.in/yaml.v2"
 )
 
 //go:embed README.md.gotemplate
@@ -22,9 +23,8 @@ func createBackup() error {
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
-		} else {
-			return fmt.Errorf("failed to rename README.md to README.md.backup, error: %s", err)
 		}
+		return fmt.Errorf("failed to rename README.md to README.md.backup, error: %s", err)
 	}
 	return nil
 }
@@ -63,8 +63,8 @@ func flagList(isRequired, isSensitive interface{}) string {
 	return strings.Join(flags, ", ")
 }
 
-func githubName(repoUrl string) string {
-	return strings.Split(repoUrl, "github.com/")[1]
+func githubName(repoURL string) string {
+	return strings.Split(repoURL, "github.com/")[1]
 }
 
 func renderTemplate(stepConfig models.StepModel) (string, error) {
