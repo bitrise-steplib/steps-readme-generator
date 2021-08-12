@@ -16,6 +16,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type config struct {
+	ExampleSection string `env:"example_section"`
+	ContribSection string `env:"contrib_section"`
+}
+
 //go:embed README.md.gotemplate
 var readmeTemplate string
 
@@ -47,7 +52,7 @@ func parseStep() (models.StepModel, error) {
 	return stepConfig, nil
 }
 
-func readSections(stepConfig Config) (exampleSection, contribSection string, err error) {
+func readSections(stepConfig config) (exampleSection, contribSection string, err error) {
 	if stepConfig.ExampleSection != "" {
 		log.Infof("Using example section from %s", stepConfig.ExampleSection)
 		exampleFile, err := ioutil.ReadFile(stepConfig.ExampleSection)
@@ -120,7 +125,7 @@ func writeReadme(contents string) error {
 }
 
 func mainR() error {
-	var stepConfig Config
+	var stepConfig config
 	if err := stepconf.Parse(&stepConfig); err != nil {
 		return err
 	}
