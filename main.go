@@ -53,22 +53,20 @@ func parseStep() (models.StepModel, error) {
 }
 
 func readSections(stepConfig config) (exampleSection, contribSection string, err error) {
-	if stepConfig.ExampleSection != "" {
-		log.Infof("Using example section from %s", stepConfig.ExampleSection)
-		exampleFile, err := ioutil.ReadFile(stepConfig.ExampleSection)
+	readSection := func(name, pth string) (string, error) {
+		log.Infof("Using %s section from %s", name, pth)
+		cont, err := ioutil.ReadFile(pth)
 		if err != nil {
-			return "", "", err
+			return "", err
 		}
-		exampleSection = string(exampleFile)
+		return string(cont), nil
+	}
+	if stepConfig.ExampleSection != "" {
+		exampleSection, err = readSection("example", stepConfig.ExampleSection)
 	}
 
-	if stepConfig.ContribSection != "" {
-		log.Infof("Using contrib section from %s", stepConfig.ContribSection)
-		contribFile, err := ioutil.ReadFile(stepConfig.ContribSection)
-		if err != nil {
-			return "", "", err
-		}
-		contribSection = string(contribFile)
+	if err != nil && stepConfig.ContribSection != "" {
+		contribSection, err = readSection("contrib", stepConfig.ContribSection)
 	}
 
 	return exampleSection, contribSection, nil
