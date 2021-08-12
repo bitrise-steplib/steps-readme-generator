@@ -16,3 +16,5 @@ workflows:
     steps:
     - path::./:
         title: Generate my own README
+        inputs:
+        - example_section: docs/example.md

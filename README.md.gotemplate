@@ -1,13 +1,13 @@
-# {{ .Title }}
+# {{ .Step.Title }}
 
-[![Step changelog](https://shields.io/github/v/release/{{ githubName .Website }}?include_prereleases&label=changelog&color=blueviolet)]({{ .Website }}/releases)
+[![Step changelog](https://shields.io/github/v/release/{{ githubName .Step.Website }}?include_prereleases&label=changelog&color=blueviolet)]({{ .Step.Website }}/releases)
 
-{{ .Summary }}
+{{ .Step.Summary }}
 
 <details>
 <summary>Description</summary>
 
-{{ .Description }}
+{{ .Step.Description }}
 </details>
 
 ## 🧩 Get started
@@ -15,22 +15,25 @@
 Add this step directly to your workflow in the [Bitrise Workflow Editor](https://devcenter.bitrise.io/steps-and-workflows/steps-and-workflows-index/).
 
 You can also run this step directly with [Bitrise CLI](https://github.com/bitrise-io/bitrise).
+{{- if .ExampleSection }}
+
+{{ .ExampleSection }}
+{{- end }}
 
 ## ⚙️ Configuration
 
 <details>
 <summary>Inputs</summary>
-{{- if eq (len .Inputs) 0 }}
+{{- if eq (len .Step.Inputs) 0 }}
 There are no inputs defined in this step
 {{- else }}
 
-| Parameter | Description | Flags | Default |
+| Key | Description | Flags | Default |
 | --- | --- | --- | --- |
-{{- range $input := .Inputs }}
-{{- $description := index $input "opts" "description" }}
+{{- range $input := .Step.Inputs }}
+{{- $description := or (index $input "opts" "description") "" }}
 {{- $required := index $input "opts" "is_required" }}
 {{- $sensitive := index $input "opts" "is_sensitive" }}
-{{- $values := index $input "opts" "value_options" }}
 
 {{- $input_key := . }}
 {{- $default := . }}
@@ -40,21 +43,21 @@ There are no inputs defined in this step
 {{- $default = $value }}
 {{- end }}
 {{- end }}
-| `{{ $input_key }}` | {{ markdownTableCompatibleString $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ $default }}`{{ end }} |
+| `{{ $input_key }}` | {{ markdownTableCompatibleString $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ markdownTableCompatibleString (print $default) }}`{{ end }} |
 {{- end }}
 {{- end }}
 </details>
 
 <details>
 <summary>Outputs</summary>
-{{- if eq (len .Outputs) 0 }}
+{{- if eq (len .Step.Outputs) 0 }}
 There are no outputs defined in this step
 {{- else }}
 
 | Environment Variable | Description |
 | --- | --- |
-{{- range $output := .Outputs }}
-{{- $description := index $output "opts" "description" }}
+{{- range $output := .Step.Outputs }}
+{{- $description := or (index $output "opts" "description") "" }}
 {{- $env_var := . }}
 {{- range $key, $value := $output }}
 {{- if ne $key "opts" }}
@@ -68,11 +71,15 @@ There are no outputs defined in this step
 
 ## 🙋 Contributing
 
-We welcome [pull requests]({{ .Website }}/pulls) and [issues]({{ .SupportURL }}) against this repository.
+We welcome [pull requests]({{ .Step.Website }}/pulls) and [issues]({{ .Step.Website }}/issues) against this repository.
 
 For pull requests, work on your changes in a forked repository and use the Bitrise CLI to [run step tests locally](https://devcenter.bitrise.io/bitrise-cli/run-your-first-build/).
+{{- if .ContribSection }}
 
-Links:
+{{ .ContribSection }}
+{{- end }}
+
+Learn more about developing steps:
 
 - [Create your own step](https://devcenter.bitrise.io/contributors/create-your-own-step/)
 - [Testing your Step](https://devcenter.bitrise.io/contributors/testing-and-versioning-your-steps/)
