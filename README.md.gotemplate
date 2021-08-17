@@ -43,7 +43,7 @@ There are no inputs defined in this step
 {{- $default = $value }}
 {{- end }}
 {{- end }}
-| `{{ $input_key }}` | {{ markdownTableCompatibleString $description }} | {{ flagList $required $sensitive }} | {{ if $default }}`{{ markdownTableCompatibleString (print $default) }}`{{ end }} |
+| `{{ $input_key }}` | {{ markdownTableCompatibleString $description }} | {{ flagList $required $sensitive }} | {{ if (hasDefault $default) }}`{{ markdownTableCompatibleString (print $default) }}`{{ end }} |
 {{- end }}
 {{- end }}
 </details>
