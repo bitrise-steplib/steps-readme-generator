@@ -94,11 +94,21 @@ func githubName(repoURL string) string {
 	return strings.Split(repoURL, "github.com/")[1]
 }
 
+// hasDefault tells if an input has a default value or not.
+// Unlike using {{ if $default }}, this handles cases when a bool input is false or when an int input is 0
+func hasDefault(defaultInputValue interface{}) bool {
+	if defaultInputValue == "" {
+		return false
+	}
+	return defaultInputValue != nil
+}
+
 func renderTemplate(step models.StepModel, exampleSection, contribSection string) (string, error) {
 	funcMap := template.FuncMap{
 		"markdownTableCompatibleString": markdownTableCompatibleString,
 		"flagList":                      flagList,
 		"githubName":                    githubName,
+		"hasDefault":                    hasDefault,
 	}
 
 	inventory := templateInventory{
