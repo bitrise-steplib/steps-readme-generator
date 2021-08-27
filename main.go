@@ -35,9 +35,8 @@ func createBackupIfReadmeAlreadyExists() error {
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
-		} else {
-			return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
 		}
+		return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
 	}
 	log.Donef("Created backup as README.md.backup")
 	return nil
