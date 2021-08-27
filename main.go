@@ -30,11 +30,15 @@ type templateInventory struct {
 	ContribSection string
 }
 
-func createBackup() error {
+func createBackupIfReadmeAlreadyExists() error {
 	err := os.Rename("README.md", "README.md.backup")
-	if err != nil && !errors.Is(err, os.ErrNotExist) {
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
 		return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
 	}
+	log.Donef("Created backup as README.md.backup")
 	return nil
 }
 
@@ -63,10 +67,16 @@ func readSections(stepConfig config) (exampleSection, contribSection string, err
 	}
 	if stepConfig.ExampleSection != "" {
 		exampleSection, err = readSection("example", stepConfig.ExampleSection)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
-	if err == nil && stepConfig.ContribSection != "" {
+	if stepConfig.ContribSection != "" {
 		contribSection, err = readSection("contrib", stepConfig.ContribSection)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
 	return exampleSection, contribSection, nil
@@ -142,10 +152,9 @@ func mainR() error {
 
 	log.Infof("Generating README.md from step.yml data")
 
-	if err := createBackup(); err != nil {
+	if err := createBackupIfReadmeAlreadyExists(); err != nil {
 		return err
 	}
-	log.Donef("Created backup as README.md.backup")
 
 	stepData, err := parseStep()
 	if err != nil {
