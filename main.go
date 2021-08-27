@@ -68,10 +68,16 @@ func readSections(stepConfig config) (exampleSection, contribSection string, err
 	}
 	if stepConfig.ExampleSection != "" {
 		exampleSection, err = readSection("example", stepConfig.ExampleSection)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
-	if err == nil && stepConfig.ContribSection != "" {
+	if stepConfig.ContribSection != "" {
 		contribSection, err = readSection("contrib", stepConfig.ContribSection)
+		if err != nil {
+			return "", "", err
+		}
 	}
 
 	return exampleSection, contribSection, nil
