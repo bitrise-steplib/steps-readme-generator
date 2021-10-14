@@ -35,6 +35,8 @@ func createBackup() error {
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
 		return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
 	}
+	log.Donef("Created backup as README.md.backup")
+
 	return nil
 }
 
@@ -145,7 +147,6 @@ func mainR() error {
 	if err := createBackup(); err != nil {
 		return err
 	}
-	log.Donef("Created backup as README.md.backup")
 
 	stepData, err := parseStep()
 	if err != nil {
