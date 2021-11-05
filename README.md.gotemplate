@@ -31,7 +31,7 @@ There are no inputs defined in this step
 | Key | Description | Flags | Default |
 | --- | --- | --- | --- |
 {{- range $input := .Step.Inputs }}
-{{- $description := or (index $input "opts" "description") "" }}
+{{- $description := or (index $input "opts" "description") (index $input "opts" "summary") }}
 {{- $required := index $input "opts" "is_required" }}
 {{- $sensitive := index $input "opts" "is_sensitive" }}
 
