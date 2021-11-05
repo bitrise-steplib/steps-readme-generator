@@ -22,8 +22,8 @@ inputs:
 - example_section: ""
   opts:
     title: Example section path
-    description: Path to a Markdown file containing step-specific examples. If specified, the contents will be included in the Get started section.
+    summary: Path to a Markdown file containing step-specific examples. If specified, the contents will be included in the Get started section.
 - contrib_section: ""
   opts:
     title: Contributor section path
-    description: Path to a Markdown file about step-specific information for contributors. If specified, the contents will be included in the Contributing section.
+    summary: Path to a Markdown file about step-specific information for contributors. If specified, the contents will be included in the Contributing section.

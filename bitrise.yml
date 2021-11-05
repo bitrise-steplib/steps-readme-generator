@@ -12,7 +12,7 @@ workflows:
         inputs:
         - workflow: e2e
 
-  generate-readme:
+  generate_readme:
     steps:
     - path::./:
         title: Generate my own README
