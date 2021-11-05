@@ -57,7 +57,7 @@ There are no outputs defined in this step
 | Environment Variable | Description |
 | --- | --- |
 {{- range $output := .Step.Outputs }}
-{{- $description := or (index $output "opts" "description") "" }}
+{{- $description := or (index $output "opts" "description") (index $output "opts" "summary") }}
 {{- $env_var := . }}
 {{- range $key, $value := $output }}
 {{- if ne $key "opts" }}
