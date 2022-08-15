@@ -17,7 +17,6 @@ toolkit:
   go:
     package_name: github.com/bitrise-steplib/steps-readme-generator
 
-
 inputs:
 - example_section: ""
   opts:
