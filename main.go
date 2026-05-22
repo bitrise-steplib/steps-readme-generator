@@ -2,9 +2,7 @@ package main
 
 import (
 	_ "embed"
-	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
@@ -30,20 +28,8 @@ type templateInventory struct {
 	ContribSection string
 }
 
-func createBackupIfReadmeAlreadyExists() error {
-	err := os.Rename("README.md", "README.md.backup")
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			return nil
-		}
-		return fmt.Errorf("failed to rename README.md to README.md.backup: %w", err)
-	}
-	log.Donef("Created backup as README.md.backup")
-	return nil
-}
-
 func parseStep() (models.StepModel, error) {
-	fileContents, err := ioutil.ReadFile("step.yml")
+	fileContents, err := os.ReadFile("step.yml")
 	if err != nil {
 		return models.StepModel{}, fmt.Errorf("failed to open step.yml: %w", err)
 	}
@@ -59,7 +45,7 @@ func parseStep() (models.StepModel, error) {
 func readSections(stepConfig config) (exampleSection, contribSection string, err error) {
 	readSection := func(name, pth string) (string, error) {
 		log.Infof("Using %s section from %s", name, pth)
-		cont, err := ioutil.ReadFile(pth)
+		cont, err := os.ReadFile(pth)
 		if err != nil {
 			return "", err
 		}
@@ -136,7 +122,7 @@ func renderTemplate(step models.StepModel, exampleSection, contribSection string
 }
 
 func writeReadme(contents string) error {
-	if err := ioutil.WriteFile("README.md", []byte(contents), 0644); err != nil {
+	if err := os.WriteFile("README.md", []byte(contents), 0644); err != nil {
 		return fmt.Errorf("failed to write README contents to file: %w", err)
 	}
 	return nil
@@ -151,10 +137,6 @@ func mainR() error {
 	fmt.Println()
 
 	log.Infof("Generating README.md from step.yml data")
-
-	if err := createBackupIfReadmeAlreadyExists(); err != nil {
-		return err
-	}
 
 	stepData, err := parseStep()
 	if err != nil {
